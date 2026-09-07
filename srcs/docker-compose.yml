@@ -1,0 +1,37 @@
+services:
+  nginx:
+    build: ./requirements/nginx
+    image: nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    restart: always
+    networks:
+      - inception
+
+  mariadb:
+    build: ./requirements/mariadb
+    image: mariadb
+    container_name: mariadb
+    restart: unless-stopped
+    networks:
+      - inception
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  wordpress_db:
+    name: wordpress_db
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/barmarti/data/mariadb
+
+  wordpress_files:
+    name: wordpress_files
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/barmarti/data/wordpress
