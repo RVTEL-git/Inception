@@ -5,4 +5,13 @@ RUN apt-get update \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["mariadbd", "-uroot", "test"]
+COPY tools/init.sh /usr/local/bin/init.sh
+COPY conf/mariadb.cnf /etc/mysql/mariadb.conf.d/99-inception.cnf
+
+RUN chmod +x /usr/local/bin/init.sh
+
+RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
+
+USER mysql
+
+ENTRYPOINT ["/usr/local/bin/init.sh"]

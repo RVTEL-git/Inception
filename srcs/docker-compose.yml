@@ -13,7 +13,23 @@ services:
     build: ./requirements/mariadb
     image: mariadb
     container_name: mariadb
-    restart: unless-stopped
+    restart: always
+    networks:
+      - inception
+    volumes:
+      - wordpress_db:/var/lib/mysql
+    secrets:
+      - db_password
+      - db_root_password
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress
+    container_name: wordpress
+    restart: always
     networks:
       - inception
 
@@ -35,3 +51,9 @@ volumes:
       type: none
       o: bind
       device: /home/barmarti/data/wordpress
+
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
