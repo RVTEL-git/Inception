@@ -2,7 +2,7 @@ FROM debian:bookworm-20260824
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nginx openssl \
-    && rm -rf /etc/nginx/sites-enabled/default /var/lib/apt/lists/*
+    && rm -rf /etc/nginx/sites-enabled/default /var/lib/apt/lists/* /var/www/html/index.nginx-debian.html
 
 RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -nodes -days 666 \
 		-newkey rsa:2048 \
